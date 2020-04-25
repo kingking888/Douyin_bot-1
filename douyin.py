@@ -12,17 +12,47 @@ import requests
 import time
 
 
+def get_play_addr(input_url):
+    headers = {
+        "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
+    }
 
-def download2File(name, url):
+
+    # 请求短链接，获得itemId和dytk
+    get = requests.get(input_url, headers=headers)
+    html = get.content
+
+    itemId = re.findall(r"(?<=itemId:\s\")\d+", str(html))
+    dytk = re.findall(r"(?<=dytk:\s\")(.*?)(?=\")", str(html))
+
+    # 组装视频长链接
+    videourl = "https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=" + itemId[0] + "&dytk=" + dytk[0]
+
+    # 请求长链接，获取play_addr
+    videoopen = requests.get(videourl, headers=headers)
+    vhtml = videoopen.text
+    uri = re.findall(r'(?<=\"uri\":\")\w{32}(?=\")', str(vhtml))
+
+    # 长链接的格式其实是固定的，唯一变动的就是video_id，上面提取出uri后进行组装即可得到最终链接
+    play_addr = "https://aweme.snssdk.com/aweme/v1/play/?video_id=" + uri[0] + \
+                "&line=0&ratio=540p&media_type=4&vr_type=0&improve_bitrate=0&is_play_url=1&is_support_h265=0&source=PackSourceEnum_PUBLISH"
+    return play_addr
+
+
+# video_url 是带水印的
+#         c.setopt(c.URL, play_addr)
+def download2File(name, video_url,html_url):
+    play_addr=get_play_addr(html_url)
     with open("download.txt", 'wb') as f:
         c = pycurl.Curl()
         c.setopt(pycurl.USERAGENT,
-                 "Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1")  # 配置请求HTTP头的User-Agent
-        c.setopt(c.URL, url)
+                 "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1")  # 配置请求HTTP头的User-Agent
+        c.setopt(c.URL, play_addr)
         c.setopt(c.CAINFO, certifi.where())
         c.setopt(c.WRITEDATA, f)
         c.perform()
         c.close()
+
 
     with open("download.txt", "r") as f:
         line = f.read()
@@ -31,7 +61,7 @@ def download2File(name, url):
         with open("download/" + name, 'wb') as f:
             c = pycurl.Curl()
             c.setopt(pycurl.USERAGENT,
-                     "Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1")  # 配置请求HTTP头的User-Agent
+                     "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1")  # 配置请求HTTP头的User-Agent
             c.setopt(c.URL, url)
             c.setopt(c.CAINFO, certifi.where())
             c.setopt(c.WRITEDATA, f)
@@ -56,6 +86,7 @@ def task():
             try:
                 url_list = re.findall(pattern, line)
                 html_url = url_list[0]
+                # print(url_list)
                 header = random.choice(header_list)
                 html = requests.get(html_url, headers=header).text
 
@@ -71,7 +102,7 @@ def task():
                 img_url = re.findall(pattern, raw_video)[1]
                 myfileNum = fileNum("download")
                 k = "%03d" % (myfileNum + 1)
-                download2File( str(k)+file_name + ".mp4", video_url)
+                download2File( str(k)+file_name + ".mp4", video_url,html_url)
                 print("\033[1;93m下载视频线程：" + file_name + ".mp4：下载完成" + "\033[0m")
             except:
                 print("下载视频线程：" + line + "下载失败")
@@ -79,7 +110,7 @@ def task():
 
         else:
             print("\033[1;93m下载视频线程：当前下载队列为空" + "\033[0m")
-            if mflag==1:
+            if mflag==2:
                 flag=0
             mflag=mflag+1
             time.sleep(10)
@@ -154,11 +185,11 @@ if __name__ == "__main__":
 
     print('''
 ***************************************************************************************************************************
-                                            抖音视频下载小助手 V 0.11
+                                            抖音视频下载小助手 V 0.12
                     注意：抖音app版本必须是最新版本 V10.8.0  更新时间：2020-4-25
                     Github地址：https://github.com/Gaoyongxian666/Douyin_bot
                     公众号：我的光印象  QQ群：1056916780 下载目录：解压目录/download
-                    功能：批量下载（包括本地下载限制）  文件命名：从001开始
+                    功能：批量下载（包括本地下载限制） 无水印   文件命名：从001开始,
                     说明：本软件基于开源项目uiautomator2项目，本项目也是开源的，可自行更改，就是个简单的自动化项目。
                     原理：是从当前视频开始，模拟操作向上滑动获取分享链接，然后通过电脑一个一个下载，（下滑的次数
                     即下载个数），必须输入视频数量（在自己的主页或者他人主页可以看到数量，或者自定义）
