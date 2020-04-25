@@ -1,6 +1,17 @@
-## 抖音视频下载小助手 V 0.1 
-### 仅适用于最新版本 抖音 V10.7.0
+## 抖音视频下载小助手 V 0.11
+### 仅适用于最新版本 抖音 V10.8.0
+### 需要电脑和手机一起使用 自动化项目
+
+
 项目就在douyin.py ,最后使用pyinstaller打包exe，大约19M
+
+
+#### 当APP更新，如何更新：
+weditor 修改控件id  
+复制一份输出文件夹  
+切换目录  pyinstaller -F -i f.ico D:\python_project\Douyin_bot\douyin.py  
+压缩打包  
+
 
                                             抖音视频下载小助手 V 0.1
                     Github地址：https://github.com/Gaoyongxian666/Douyin_bot

@@ -13,33 +13,6 @@ import time
 
 
 
-def downloadFile(name, url):
-    headers = {'Proxy-Connection': 'keep-alive',
-               "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11"}
-    r = requests.get(url, stream=True, headers=headers)
-    length = float(r.headers['content-length'])
-    f = open("download/" + name, 'wb')
-    count = 0
-    count_tmp = 0
-    time1 = time.time()
-    for chunk in r.iter_content(chunk_size=512):
-        if chunk:
-            f.write(chunk)
-            count += len(chunk)
-            if time.time() - time1 > 2:
-                p = count / length * 100
-                speed = (count - count_tmp) / 1024 / 1024 / 2
-                count_tmp = count
-
-                print("\033[1;93m下载视频线程：" + name + ': ' + formatFloat(p) + '%' + ' Speed: ' + formatFloat(
-                    speed) + 'M/S' + "\033[0m")
-                time1 = time.time()
-    f.close()
-
-def formatFloat(num):
-    return '{:.2f}'.format(num)
-
-
 def download2File(name, url):
     with open("download.txt", 'wb') as f:
         c = pycurl.Curl()
@@ -65,6 +38,13 @@ def download2File(name, url):
             c.perform()
             c.close()
 
+def fileNum(path):
+    fileNum=0
+    for lists in os.listdir(path):
+        sub_path = os.path.join(path, lists)
+        if os.path.isfile(sub_path):
+            fileNum = fileNum + 1  # 统计文件数量
+    return fileNum
 
 def task():
     time.sleep(2)
@@ -89,7 +69,9 @@ def task():
                 raw_video = str(soup.find_all("script")[-1])
                 video_url = re.findall(pattern, raw_video)[0]
                 img_url = re.findall(pattern, raw_video)[1]
-                download2File(file_name + ".mp4", video_url)
+                myfileNum = fileNum("download")
+                k = "%03d" % (myfileNum + 1)
+                download2File( str(k)+file_name + ".mp4", video_url)
                 print("\033[1;93m下载视频线程：" + file_name + ".mp4：下载完成" + "\033[0m")
             except:
                 print("下载视频线程：" + line + "下载失败")
@@ -101,16 +83,61 @@ def task():
                 flag=0
             mflag=mflag+1
             time.sleep(10)
+    os.system("pause")
+
+
+
+def do():
+    print("开始下载：请先打开第一个要下载的视频（可以暂停）")
+    if d.app_current()["package"]!="com.ss.android.ugc.aweme":
+        print("\033[1;91m开始下载：请先打开抖音APP，然后输入下载视频数量"+ "\033[0m")
+    num = input("开始下载：本次下载视频的数量（不输入默认20，输入完回车）：")
+    print(
+        "***************************************************************************************************************************")
+
+    if num != "":
+        num = int(num) + int(num) % 10
+    else:
+        num = 20
+
+    p = Thread(target=task)
+    p.start()
+
+    for i in range(num):
+        try:
+            # 点击分享按钮
+            d(resourceId="com.ss.android.ugc.aweme:id/dbv").click()
+
+            # 一次水平拖不到底
+            # 多个水平滚动的
+            d(className="android.support.v7.widget.RecyclerView", resourceId="com.ss.android.ugc.aweme:id/az",
+              scrollable=True).fling.horiz.toEnd()
+            d(className="android.support.v7.widget.RecyclerView", resourceId="com.ss.android.ugc.aweme:id/az",
+              scrollable=True).fling.horiz.toEnd()
+
+            # 点击复制
+            d(text="复制链接").click()
+
+            # 获取链接，好像有延时，所以
+            time.sleep(0.3)
+            raw_url = d.clipboard
+            print("\033[1;36m获取分享链接：" + raw_url + "\033[0m")
+            q.put(raw_url)
+
+            # 向上滑动,获取下一个
+            d(resourceId="com.ss.android.ugc.aweme:id/bc0").swipe("up", steps=14)
+        except:
+            print("\033[1;36m获取分享链接：获取分享链接失败" + "\033[0m")
+            time.sleep(4)
+
 
 
 if __name__ == "__main__":
-    print("设置ADB环境变量。。。。")
+    # print("设置ADB环境变量。。。。")
     work_dir=os.path.dirname(sys.argv[0])
-    print(work_dir)
     os.chdir(work_dir)
     line = 'adb.exe  devices'
-    print(line)
-    os.system(line)
+    os.popen(line)
     q = queue.Queue()
     pattern = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
     header_list = [
@@ -126,19 +153,23 @@ if __name__ == "__main__":
         os.mkdir("download")
 
     print('''
-************************************************************************************************************************
-                                            抖音视频下载小助手 V 0.1
+***************************************************************************************************************************
+                                            抖音视频下载小助手 V 0.11
+                    注意：抖音app版本必须是最新版本 V10.8.0  更新时间：2020-4-25
                     Github地址：https://github.com/Gaoyongxian666/Douyin_bot
                     公众号：我的光印象  QQ群：1056916780 下载目录：解压目录/download
-                    功能：他人作品，他人喜欢，自己作品，自己喜欢，本地下载限制
-                    特点：因为是模拟手机操作，本软件可以一直使用，除非你进行了抖音APP升级。
-                    说明：本软件基于开源项目uiautomator2项目，所以本项目也是开源的，自己也可进行更改，项目很简单。
-                    注意：抖音app版本必须是最新版本 V10.7.0  更新时间：2020-4-19
-                    在输入下载视频个数前，一定要做好三步：  
-                    1.打开调试 USB计算机连接选择传输文件 。。。  
-                    2.安装两个APP。。。  
+                    功能：批量下载（包括本地下载限制）  文件命名：从001开始
+                    说明：本软件基于开源项目uiautomator2项目，本项目也是开源的，可自行更改，就是个简单的自动化项目。
+                    原理：是从当前视频开始，模拟操作向上滑动获取分享链接，然后通过电脑一个一个下载，（下滑的次数
+                    即下载个数），必须输入视频数量（在自己的主页或者他人主页可以看到数量，或者自定义）
+
+                    环境搭建：
+                    1.打开USB调试，USB计算机连接选择传输文件 
+                    2.安装两个APP ，最后出现：设备连接成功
+                    
+                    开始下载：
                     3.打开第一个要下载的视频（可以暂停）  
-                    4.最后输入要下载的视频个数  
+                    4.最后输入要下载的视频个数  最后出现：看到电脑控制手机
 
                     使用方法：
                     1.初始化：手机打开调试模式，在首次运行本软件出现弹框点击一直允许，USB计算机连接选择传输文件
@@ -147,46 +178,19 @@ if __name__ == "__main__":
                     
                     3.开始下载：打开本软件之后第一件事是打开第一个视频（原理是从当前视频开始向上滑动一个一个下载，
                     下滑的次数即下载个数），必须输入视频数量（在自己的主页或者他人主页可以看到数量，或者自定义）
-************************************************************************************************************************
-    ''')
+***************************************************************************************************************************''')
+    try:
+        print("环境搭建：测试连接中。。")
+        d = u2.connect()
+        print("环境搭建：设备连接成功！")
+        print("***************************************************************************************************************************")
+        do()
 
-    num = input("本次下载视频的数量（不输入默认20，输入完回车,记得看使用方法）：")
-    d = u2.connect()
-    print(d.info)
-    print("设备连接成功！")
-    if num != "":
-        num = int(num) + int(num) % 10
-    else:
-        num = 20
+    except :
+        print("环境搭建：测试连接失败")
+        os.system("pause")
 
-    p = Thread(target=task)
-    p.start()
 
-    for i in range(num):
-        # 点击分享按钮
-        d(resourceId="com.ss.android.ugc.aweme:id/dbx").click()
 
-        # 一次水平拖不到底
-        # 多个水平滚动的
-        d(className="android.support.v7.widget.RecyclerView", resourceId="com.ss.android.ugc.aweme:id/az",
-          scrollable=True).fling.horiz.toEnd()
-        d(className="android.support.v7.widget.RecyclerView", resourceId="com.ss.android.ugc.aweme:id/az",
-          scrollable=True).fling.horiz.toEnd()
 
-        # 点击复制
-        d(text="复制链接").click()
 
-        # 获取链接，好像有延时，所以
-        time.sleep(0.3)
-        raw_url = d.clipboard
-        print("\033[1;36m获取分享链接：" + raw_url + "\033[0m")
-        q.put(raw_url)
-
-        # 向上滑动,获取下一个
-        d(resourceId="com.ss.android.ugc.aweme:id/bam").swipe("up", steps=14)
-    os.system("pause")
-
-# 适用于最新版本 抖音V10.7.0 版本
-# 不是这个版本的使用不了，因为抖音每个版本APP控件的ID会有一定变化
-# 主要是这两个 d(resourceId="com.ss.android.ugc.aweme:id/bam").swipe("up", steps=20)     d(resourceId="com.ss.android.ugc.aweme:id/dbx").click()
-# 根据输入的视频数量做程序终止判断
