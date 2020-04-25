@@ -5,6 +5,19 @@
 项目就在douyin.py ,最后使用pyinstaller打包exe，大约19M
 
 
+ 软件截图
+ ![image](test/test1.png)
+
+ 下载的文件  
+ ![image](test/test2.png)
+ 
+ 手机被控制的效果  
+ ![image](test/test3.gif)
+
+ 
+ 
+
+
 #### 当APP更新，如何更新：
 weditor 修改控件id  
 复制一份输出文件夹  

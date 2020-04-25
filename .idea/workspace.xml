@@ -46,8 +46,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="703">
-                <caret line="37" column="66" selection-start-line="37" selection-start-column="66" selection-end-line="37" selection-end-column="66" />
+              <first_editor relative-caret-position="-95">
+                <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
               </first_editor>
               <second_editor />
             </state>
@@ -158,6 +158,11 @@
               <item name="Douyin_bot" type="b2602c69:ProjectViewProjectNode" />
               <item name="Douyin_bot" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Douyin_bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Douyin_bot" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -171,11 +176,12 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\python_project\Douyin_bot\test" />
+      <recent name="D:\python_project\Douyin_bot" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\python_project\Douyin_bot\test" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\python_project\Douyin_bot" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -325,18 +331,18 @@
       <workItem from="1587281026612" duration="15065000" />
       <workItem from="1587347491931" duration="5499000" />
       <workItem from="1587736145306" duration="1515000" />
-      <workItem from="1587784291718" duration="6628000" />
+      <workItem from="1587784291718" duration="7751000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43426000" />
+    <option name="totallyTimeSpent" value="44549000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26928896" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15960665" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -436,8 +442,8 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="703">
-            <caret line="37" column="66" selection-start-line="37" selection-start-column="66" selection-end-line="37" selection-end-column="66" />
+          <first_editor relative-caret-position="-95">
+            <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
           </first_editor>
           <second_editor />
         </state>
