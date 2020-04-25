@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a34da380-cc4f-4fe2-a114-536430259ec2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/test/nowater.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/pycurl_nowater.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/douyin.py" beforeDir="false" afterPath="$PROJECT_DIR$/douyin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/download.txt" beforeDir="false" afterPath="$PROJECT_DIR$/download.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,7 +21,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/douyin.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="98">
@@ -55,12 +50,12 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="152">
-                <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
+              <first_editor relative-caret-position="-228">
+                <caret column="19" selection-start-column="19" selection-end-column="19" />
               </first_editor>
               <second_editor />
             </state>
@@ -149,6 +144,7 @@
     <findStrings>
       <find>video</find>
       <find>download2File</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -166,8 +162,8 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/test/nowater.py" />
         <option value="$PROJECT_DIR$/test/pycurl_nowater.py" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/douyin.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -360,12 +356,12 @@
       <workItem from="1587347491931" duration="5499000" />
       <workItem from="1587736145306" duration="1515000" />
       <workItem from="1587784291718" duration="10927000" />
-      <workItem from="1587813409015" duration="4159000" />
+      <workItem from="1587813409015" duration="4772000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51884000" />
+    <option name="totallyTimeSpent" value="52497000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -484,16 +480,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="152">
-            <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/douyin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="98">
@@ -506,6 +492,16 @@
             <element signature="e#2796#4221#0" />
             <element signature="e#4256#6739#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="-228">
+            <caret column="19" selection-start-column="19" selection-end-column="19" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
