@@ -15,8 +15,8 @@
  ![image](test/test3.gif)
 
  
- V0.12 更新无水印
-
+ V0.12 更新无水印  
+ V0.13 更新Android10可以
 
 #### 当APP更新，如何更新：
 weditor 修改控件id  

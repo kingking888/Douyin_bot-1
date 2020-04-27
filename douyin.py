@@ -2,6 +2,7 @@ import os
 import pycurl
 import queue
 import sys
+import traceback
 from threading import Thread
 import certifi
 import uiautomator2 as u2
@@ -110,13 +111,64 @@ def task():
 
         else:
             print("\033[1;93m下载视频线程：当前下载队列为空" + "\033[0m")
-            if mflag==2:
+            if mflag==5:
                 flag=0
             mflag=mflag+1
             time.sleep(10)
     os.system("pause")
 
 
+
+def android10_do():
+    d.app_install("https://github.com/majido/clipper/releases/download/v1.2.1/clipper.apk")
+    print("开始下载：请先打开第一个要下载的视频（可以暂停）")
+    if d.app_current()["package"]!="com.ss.android.ugc.aweme":
+        print("\033[1;91m开始下载：请先打开抖音APP，然后输入下载视频数量"+ "\033[0m")
+    num = input("开始下载：本次下载视频的数量（不输入默认20，输入完回车）：")
+    print(
+        "***************************************************************************************************************************")
+
+    if num != "":
+        num = int(num) + int(num) % 10
+    else:
+        num = 20
+
+    p = Thread(target=task)
+    p.start()
+
+    for i in range(num):
+        try:
+            # 点击分享按钮
+            d(resourceId="com.ss.android.ugc.aweme:id/dbv").click()
+
+            # 一次水平拖不到底
+            # 多个水平滚动的
+            d(className="android.support.v7.widget.RecyclerView", resourceId="com.ss.android.ugc.aweme:id/az",
+              scrollable=True).fling.horiz.toEnd()
+            d(className="android.support.v7.widget.RecyclerView", resourceId="com.ss.android.ugc.aweme:id/az",
+              scrollable=True).fling.horiz.toEnd()
+
+            # 点击复制
+            d(text="复制链接").click()
+
+            # 获取链接，好像有延时，所以
+            time.sleep(0.3)
+
+
+            d.app_start("ca.zgrs.clipper",wait=True)
+            result=d.adb_shell("am broadcast -a clipper.get")
+            d.app_start("com.ss.android.ugc.aweme",wait=True)
+
+            # raw_url = d.jsonrpc.getClipboard()
+            # print(raw_url)
+            print("\033[1;36m获取分享链接：" + result + "\033[0m")
+            q.put(result)
+            # 向上滑动,获取下一个
+            d(resourceId="com.ss.android.ugc.aweme:id/bc0").swipe("up", steps=14)
+        except Exception:
+            print(traceback.format_exc())
+            print("\033[1;36m获取分享链接：获取分享链接失败" + "\033[0m")
+            time.sleep(4)
 
 def do():
     print("开始下载：请先打开第一个要下载的视频（可以暂停）")
@@ -151,16 +203,22 @@ def do():
 
             # 获取链接，好像有延时，所以
             time.sleep(0.3)
-            raw_url = d.clipboard
+
+
+            # d.app_start("ca.zgrs.clipper",wait=True)
+            # result=d.adb_shell("am broadcast -a clipper.get")
+            # d.app_start("com.ss.android.ugc.aweme",wait=True)
+
+            raw_url = d.jsonrpc.getClipboard()
+            # print(raw_url)
             print("\033[1;36m获取分享链接：" + raw_url + "\033[0m")
             q.put(raw_url)
-
             # 向上滑动,获取下一个
             d(resourceId="com.ss.android.ugc.aweme:id/bc0").swipe("up", steps=14)
-        except:
+        except Exception:
+            print(traceback.format_exc())
             print("\033[1;36m获取分享链接：获取分享链接失败" + "\033[0m")
             time.sleep(4)
-
 
 
 if __name__ == "__main__":
@@ -185,8 +243,9 @@ if __name__ == "__main__":
 
     print('''
 ***************************************************************************************************************************
-                                            抖音视频下载小助手 V 0.12
-                    注意：抖音app版本必须是最新版本 V10.8.0  更新时间：2020-4-25
+                                            抖音视频下载小助手 V 0.13
+                    注意：抖音app版本必须是最新版本 V10.8.0  更新时间：2020-4-27
+                
                     Github地址：https://github.com/Gaoyongxian666/Douyin_bot
                     公众号：我的光印象  QQ群：1056916780 下载目录：解压目录/download
                     功能：批量下载（包括本地下载限制） 无水印   文件命名：从001开始,
@@ -213,9 +272,14 @@ if __name__ == "__main__":
     try:
         print("环境搭建：测试连接中。。")
         d = u2.connect()
+        print(d.device_info)
         print("环境搭建：设备连接成功！")
         print("***************************************************************************************************************************")
-        do()
+        android  = input("开始下载：android版本是否是10以上（y/n）：")
+        if android=="y":
+            android10_do()
+        else:
+            do()
 
     except :
         print("环境搭建：测试连接失败")
